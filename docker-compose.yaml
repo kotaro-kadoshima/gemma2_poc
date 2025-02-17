@@ -1,0 +1,12 @@
+services:
+  gemma2_chatbot:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      HUGGINGFACEHUB_API_TOKEN: ${HUGGINGFACEHUB_API_TOKEN}
+    deploy:
+      resources:
+        limits:
+          cpus: "4.0" # 4コアを割り当てる
+          memory: "8g" # 8GBのメモリを割り当てる
