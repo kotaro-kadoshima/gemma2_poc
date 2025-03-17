@@ -20,10 +20,22 @@
         document.getElementById('sendButton').addEventListener('click', function() {
             var userInput = document.getElementById('userInput').value;
             if (!userInput) return;
-
+    
             var chatbox = document.getElementById('chatbox');
             chatbox.innerHTML += '<div><strong>あなた:</strong> ' + userInput + '</div>';
-
+    
+            // 「思考中…」の表示
+            var thinkingMessage = document.createElement('div');
+            thinkingMessage.innerHTML = '<strong>Bot:</strong> 思考中... 0秒';
+            chatbox.appendChild(thinkingMessage);
+            chatbox.scrollTop = chatbox.scrollHeight;
+    
+            let seconds = 0;
+            let timer = setInterval(() => {
+                seconds++;
+                thinkingMessage.innerHTML = `<strong>Bot:</strong> 思考中... ${seconds}秒`;
+            }, 1000);
+    
             fetch('/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -31,11 +43,16 @@
             })
             .then(response => response.json())
             .then(data => {
-                chatbox.innerHTML += '<div><strong>Bot:</strong> ' + data.response + '</div>';
+                clearInterval(timer); // タイマーを停止
+                thinkingMessage.innerHTML = `<strong>Bot(思考時間${seconds}秒):</strong> ${data.response}`; // AIの応答を表示
                 document.getElementById('userInput').value = '';
                 chatbox.scrollTop = chatbox.scrollHeight;
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                clearInterval(timer);
+                thinkingMessage.innerHTML = `<strong>Bot:</strong> エラーが発生しました`;
+                console.error('Error:', error);
+            });
         });
     </script>
 </body>

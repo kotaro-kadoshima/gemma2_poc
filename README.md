@@ -22,6 +22,18 @@ http://localhost:8080/
 ![alt text](image/image_3.png)
 MacBook Air M3 で約 30 秒かかった。
 
+## Docker ではなくローカルで起動する方法
+
+- poetry を使用して起動します。
+
+```
+poetry install
+```
+
+```
+poetry run python app.py
+```
+
 ## トラブルシューティング
 
 ### Q:　質問したらタイムアウトエラーする
